@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suchin AI — Gemini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">S</div><div><b>Suchin AI</b><small>Gemini Chat</small></div></div>
+    <button id="newChat" class="new-chat">＋ แชตใหม่</button>
+    <div class="label">เครื่องมือ</div>
+    <button id="settings" class="side-btn">⚙ ตั้งค่า API</button>
+    <button id="clear" class="side-btn">⌫ ล้างบทสนทนา</button>
+    <div class="tip"><b>โปรเจกต์สำหรับนำเสนอ</b><p>AI Chatbot ที่รับคำถามปลายเปิดและตอบกลับด้วย Gemini API</p></div>
+    <div class="status"><span id="statusDot"></span><span id="statusText">ยังไม่ได้เชื่อมต่อ</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <span>MODEL</span>
+        <select id="model">
+          <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite — แนะนำสำหรับ Demo</option>
+          <option value="gemini-3.8-flash">Gemini 3.8 Flash — ความสามารถสูงกว่า</option>
+          <option value="gemini-2.5-flash">Gemini 2.5 Flash — รุ่นที่มี Free Tier</option>
+        </select>
+      </div>
+      <button id="topSettings" class="outline">ตั้งค่า API</button>
+    </header>
+
+    <section class="chat">
+      <div id="welcome" class="welcome">
+        <div class="gemini-mark">✦</div>
+        <h1>สวัสดีครับ 👋</h1>
+        <p>ถามอะไรก็ได้ แล้ว Gemini จะช่วยตอบให้คุณ</p>
+        <div class="cards">
+          <button class="card" data-prompt="ช่วยอธิบายปัญญาประดิษฐ์ (AI) ให้เข้าใจง่ายสำหรับนักเรียน"><strong>🧠 เรียนรู้</strong><small>อธิบายเรื่องยากให้เข้าใจง่าย</small></button>
+          <button class="card" data-prompt="ช่วยคิดไอเดียโปรเจกต์เว็บไซต์ AI สำหรับนำเสนออาจารย์ 5 ไอเดีย พร้อมข้อดีของแต่ละไอเดีย"><strong>💡 หาไอเดีย</strong><small>ช่วยคิดโปรเจกต์และคอนเทนต์</small></button>
+          <button class="card" data-prompt="เขียนตัวอย่าง HTML CSS และ JavaScript สำหรับทำหน้าเว็บเครื่องคิดเลขแบบสวย ๆ ให้หน่อย"><strong>💻 เขียนโค้ด</strong><small>ช่วยพัฒนาเว็บไซต์</small></button>
+          <button class="card" data-prompt="คุยกับฉันเป็นภาษาอังกฤษแบบง่าย ๆ และแก้แกรมมาร์ให้ฉันทุกครั้งที่ตอบ"><strong>🌎 ฝึกภาษา</strong><small>ฝึกคุยภาษาอังกฤษ</small></button>
+        </div>
+      </div>
+      <div id="messages" class="messages"></div>
+    </section>
+
+    <section class="composer-area">
+      <div id="notice" class="notice">🔑 ใส่ Gemini API Key ก่อนใช้งาน โดยกด “ตั้งค่า API”</div>
+      <form id="form" class="composer">
+        <textarea id="input" rows="1" placeholder="พิมพ์คำถามอะไรก็ได้..." autocomplete="off"></textarea>
+        <button id="send" type="submit">➤</button>
+      </form>
+      <div class="hint">Enter = ส่ง • Shift + Enter = ขึ้นบรรทัดใหม่ • ตอบโดย Gemini</div>
+    </section>
+  </main>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="backdrop" data-close></div>
+  <div class="modal-card">
+    <div class="modal-head"><div><small>GEMINI API</small><h2>เชื่อมต่อ Gemini</h2></div><button id="close" class="close">×</button></div>
+    <p>สร้าง API Key จาก Google AI Studio แล้วนำมาวางที่นี่</p>
+    <label>Gemini API Key</label>
+    <div class="key-row"><input id="key" type="password" placeholder="AIza..." autocomplete="off"><button id="showKey" type="button">แสดง</button></div>
+    <label>โมเดล</label>
+    <select id="modalModel">
+      <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</option>
+      <option value="gemini-3.8-flash">Gemini 3.8 Flash</option>
+      <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+    </select>
+    <div id="testBox" class="test-box hidden"></div>
+    <div class="actions">
+      <button id="removeKey" class="danger" type="button">ลบ Key</button>
+      <div><button id="test" class="outline" type="button">ทดสอบ Key</button><button id="save" class="primary" type="button">บันทึก</button></div>
+    </div>
+    <p class="security">⚠️ เวอร์ชันนี้เป็น Frontend ล้วน จึงเหมาะสำหรับ Demo/ใช้งานส่วนตัว อย่าเผยแพร่ API Key ลงเว็บสาธารณะ</p>
+    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">เปิด Google AI Studio เพื่อสร้าง API Key ↗</a>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
